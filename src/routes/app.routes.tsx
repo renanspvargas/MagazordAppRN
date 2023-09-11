@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {TodoPage} from '../pages/todo.page';
+import {TodoPage} from '../modules/todo/pages/todo.page';
 import {WeatherPge} from '../pages/weather.page';
 import {NavigationContainer} from '@react-navigation/native';
 
