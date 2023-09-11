@@ -4,7 +4,6 @@ import {AppRoutes} from './src/routes/app.routes';
 function App(): JSX.Element {
   return (
     <View style={{flex: 1}}>
-      <StatusBar></StatusBar>
       <AppRoutes />
     </View>
   );
