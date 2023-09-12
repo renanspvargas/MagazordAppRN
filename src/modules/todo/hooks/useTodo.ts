@@ -29,10 +29,7 @@ export function useTodo() {
   ]);
 
   function didTapTask(index: number) {
-    console.log(tasks);
-    console.log('inicial', tasks[index].completed);
     tasks[index].completed = tasks[index].completed ? false : true;
-    console.log('depois', tasks[index].completed);
     const removedItem = tasks.splice(index, 1)[0];
 
     if (!removedItem.completed) {
@@ -41,7 +38,6 @@ export function useTodo() {
       tasks.push(removedItem);
     }
 
-    console.log(tasks);
     setTasks([...tasks]);
   }
 
