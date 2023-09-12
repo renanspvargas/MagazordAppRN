@@ -1,14 +1,45 @@
-import React from 'react';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {useWeather} from '../hooks/useWeather';
 
 export function WeatherPge() {
+  const {weatherDetails, errorMessage, isLoading, getWeatherDataForInput} =
+    useWeather();
+
+  const [textInput, setTextInput] = useState('');
+
+  useEffect(() => {
+    if (errorMessage.message !== '') {
+      showErrorMessage(errorMessage.message);
+    }
+  }, [errorMessage]);
+
+  function showErrorMessage(message: string) {
+    Alert.alert('Erro ao buscar dados', message);
+  }
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
+      {isLoading && (
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}
+        />
+      )}
       <View style={{padding: 10, alignItems: 'center'}}>
         <Text style={{textAlign: 'center', fontSize: 18, fontWeight: 'bold'}}>
           Pesquise por cidade
         </Text>
         <TextInput
+          onChangeText={setTextInput}
           placeholder="Digite aqui"
           style={{
             height: 50,
@@ -21,6 +52,11 @@ export function WeatherPge() {
           }}
         />
         <TouchableOpacity
+          onPress={() => {
+            if (textInput !== '') {
+              getWeatherDataForInput(textInput);
+            }
+          }}
           style={{
             backgroundColor: '#241468',
             marginTop: 10,
@@ -41,14 +77,24 @@ export function WeatherPge() {
             marginTop: 15,
           }}
         />
-        <Text style={{marginTop: 20, fontSize: 24, fontWeight: 'bold'}}>
-          Nome da cidade
-        </Text>
-        <Text style={{fontSize: 16}}>País pertencente</Text>
-        <Text style={{marginTop: 15, fontSize: 20, fontWeight: '500'}}>
-          Temperatura
-        </Text>
-        <Text style={{fontSize: 16}}>Descritivo</Text>
+        {weatherDetails ? (
+          <>
+            <Text style={{marginTop: 20, fontSize: 24, fontWeight: 'bold'}}>
+              {weatherDetails.location.name}
+            </Text>
+            <Text style={{fontSize: 16}}>
+              {weatherDetails.location.country}
+            </Text>
+            <Text style={{marginTop: 15, fontSize: 20, fontWeight: '500'}}>
+              Temperature: {weatherDetails.current.temp_c}°C
+            </Text>
+            <Text style={{fontSize: 16}}>
+              Condition: {weatherDetails.current.condition.text}
+            </Text>
+          </>
+        ) : (
+          <></>
+        )}
       </View>
     </View>
   );
